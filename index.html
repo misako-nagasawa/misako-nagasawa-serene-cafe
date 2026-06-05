@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sérène — 穏やかな時間が流れるカフェ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Jost:wght@300;400;500&family=Shippori+Mincho:wght@400;500&family=Zen+Kaku+Gothic+New:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    /* Earth-tone palette (oklch) */
+    --bg:        oklch(0.972 0.012 78);   /* warm cream */
+    --bg-2:      oklch(0.945 0.018 74);   /* deeper cream */
+    --surface:   oklch(0.988 0.008 80);   /* near white card */
+    --ink:       oklch(0.30 0.022 58);    /* deep warm brown text */
+    --ink-soft:  oklch(0.46 0.028 56);    /* softer brown */
+    --brown:     oklch(0.42 0.045 52);    /* primary brown */
+    --terra:     oklch(0.62 0.105 44);    /* terracotta accent */
+    --terra-deep:oklch(0.52 0.10 42);
+    --sage:      oklch(0.60 0.045 142);   /* plant green accent */
+    --line:      oklch(0.86 0.018 72);    /* hairline */
+    --line-soft: oklch(0.90 0.014 74);
+
+    --serif: "Cormorant Garamond", "Shippori Mincho", serif;
+    --mincho: "Shippori Mincho", serif;
+    --sans: "Jost", "Zen Kaku Gothic New", sans-serif;
+    --jp: "Zen Kaku Gothic New", sans-serif;
+
+    --maxw: 1240px;
+    --ease: cubic-bezier(.22,.61,.36,1);
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--jp);
+    font-weight:400;
+    line-height:1.85;
+    letter-spacing:.02em;
+    overflow-x:hidden;
+  }
+  img{ display:block; max-width:100%; }
+  a{ color:inherit; text-decoration:none; }
+  ::selection{ background:var(--terra); color:var(--bg); }
+
+  .wrap{ width:100%; max-width:var(--maxw); margin-inline:auto; padding-inline:clamp(20px,5vw,64px); }
+
+  /* ---------- Placeholder image system ---------- */
+  .ph{
+    position:relative;
+    background:
+      repeating-linear-gradient(135deg,
+        oklch(0.90 0.022 72) 0 14px,
+        oklch(0.93 0.018 74) 14px 28px);
+    overflow:hidden;
+    color:var(--ink-soft);
+  }
+  .ph::after{
+    content:attr(data-label);
+    position:absolute;
+    left:50%; top:50%; transform:translate(-50%,-50%);
+    font-family:"Jost",monospace;
+    font-size:.72rem;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:oklch(0.50 0.03 56 / .72);
+    background:oklch(0.97 0.012 78 / .82);
+    padding:7px 13px;
+    border-radius:2px;
+    white-space:nowrap;
+    backdrop-filter:blur(2px);
+  }
+  .ph.dark{
+    background:
+      repeating-linear-gradient(135deg,
+        oklch(0.42 0.04 52) 0 14px,
+        oklch(0.46 0.045 50) 14px 28px);
+  }
+  .ph.dark::after{ color:oklch(0.95 0.02 78 / .9); background:oklch(0.32 0.03 52 / .6); }
+
+  /* ---------- Nav ---------- */
+  header.nav{
+    position:fixed; inset:0 0 auto 0; z-index:60;
+    transition:background .5s var(--ease), box-shadow .5s var(--ease), padding .5s var(--ease);
+    padding:26px 0;
+  }
+  header.nav.scrolled{
+    background:oklch(0.972 0.012 78 / .86);
+    backdrop-filter:blur(14px) saturate(1.1);
+    box-shadow:0 1px 0 var(--line-soft);
+    padding:16px 0;
+  }
+  .nav-inner{ display:flex; align-items:center; justify-content:space-between; gap:24px; }
+  .brand{
+    font-family:var(--serif);
+    font-size:1.7rem;
+    font-weight:500;
+    letter-spacing:.06em;
+    line-height:1;
+    color:var(--ink);
+    transition:color .5s var(--ease);
+  }
+  .brand .dot{ color:var(--terra); }
+  header.nav:not(.scrolled) .brand,
+  header.nav:not(.scrolled) .nav-links a{ color:oklch(0.97 0.012 80); }
+  header.nav:not(.scrolled) .brand .dot{ color:var(--terra); }
+
+  .nav-links{ display:flex; align-items:center; gap:clamp(20px,2.4vw,40px); }
+  .nav-links a{
+    font-family:var(--sans);
+    font-size:.84rem;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    position:relative;
+    padding:4px 0;
+    transition:color .3s var(--ease);
+  }
+  .nav-links a::after{
+    content:""; position:absolute; left:0; bottom:-2px; height:1px; width:0;
+    background:currentColor; transition:width .35s var(--ease);
+  }
+  .nav-links a:hover::after{ width:100%; }
+  .nav-cta{
+    font-family:var(--sans);
+    font-size:.82rem; letter-spacing:.1em; text-transform:uppercase;
+    border:1px solid currentColor;
+    padding:9px 20px; border-radius:100px;
+    transition:background .35s var(--ease), color .35s var(--ease), border-color .35s var(--ease);
+  }
+  header.nav.scrolled .nav-cta{ color:var(--terra); border-color:var(--terra); }
+  .nav-cta:hover{ background:var(--terra); border-color:var(--terra); color:var(--bg) !important; }
+
+  .burger{ display:none; flex-direction:column; gap:5px; background:none; border:0; cursor:pointer; padding:6px; }
+  .burger span{ display:block; width:24px; height:1.5px; background:currentColor; transition:.3s var(--ease); }
+  header.nav:not(.scrolled) .burger span{ background:oklch(0.97 0.012 80); }
+
+  /* ---------- Hero ---------- */
+  .hero{ position:relative; min-height:100svh; display:flex; align-items:flex-end; color:oklch(0.97 0.012 80); }
+  .hero .ph{ position:absolute; inset:0; }
+  .hero .ph{
+    background:
+      linear-gradient(180deg, oklch(0.30 0.03 52 / .50), oklch(0.26 0.03 50 / .62)),
+      repeating-linear-gradient(135deg, oklch(0.50 0.05 52) 0 22px, oklch(0.54 0.055 50) 22px 44px);
+  }
+  .hero .ph::after{ top:38%; }
+  .hero-inner{ position:relative; z-index:2; width:100%; padding-bottom:clamp(56px,9vh,110px); }
+  .hero .eyebrow{
+    font-family:var(--sans); font-size:.82rem; letter-spacing:.42em; text-transform:uppercase;
+    opacity:.92; margin-bottom:26px; display:flex; align-items:center; gap:14px;
+  }
+  .hero .eyebrow::before{ content:""; width:42px; height:1px; background:currentColor; opacity:.7; }
+  .hero h1{
+    font-family:var(--serif); font-weight:400;
+    font-size:clamp(3.2rem,11vw,9rem); line-height:.92; letter-spacing:.01em;
+    margin-bottom:24px;
+  }
+  .hero h1 em{ font-style:italic; color:oklch(0.86 0.08 48); }
+  .hero .lead{
+    font-family:var(--mincho); font-size:clamp(1.05rem,2.2vw,1.4rem); font-weight:400;
+    line-height:2.1; max-width:30ch; opacity:.96;
+  }
+  .scrollcue{
+    position:absolute; right:clamp(20px,5vw,64px); bottom:42px; z-index:2;
+    font-family:var(--sans); font-size:.72rem; letter-spacing:.2em; text-transform:uppercase;
+    writing-mode:vertical-rl; display:flex; align-items:center; gap:14px; opacity:.85;
+  }
+  .scrollcue .bar{ width:1px; height:48px; background:currentColor; position:relative; overflow:hidden; }
+  .scrollcue .bar::after{ content:""; position:absolute; inset:0; background:oklch(0.86 0.08 48); transform:translateY(-100%); animation:cue 2.4s var(--ease) infinite; }
+  @keyframes cue{ 0%{transform:translateY(-100%);} 50%{transform:translateY(0);} 100%{transform:translateY(100%);} }
+
+  /* ---------- Section scaffolding ---------- */
+  section{ position:relative; }
+  .pad{ padding-block:clamp(80px,12vh,150px); }
+  .sec-eyebrow{
+    font-family:var(--sans); font-size:.78rem; letter-spacing:.34em; text-transform:uppercase;
+    color:var(--terra); display:flex; align-items:center; gap:14px; margin-bottom:22px;
+  }
+  .sec-eyebrow::before{ content:""; width:34px; height:1px; background:var(--terra); }
+  h2.title{
+    font-family:var(--serif); font-weight:400; color:var(--ink);
+    font-size:clamp(2.2rem,5vw,3.6rem); line-height:1.08; letter-spacing:.01em;
+  }
+  h2.title em{ font-style:italic; color:var(--terra); }
+  .sub-jp{ font-family:var(--mincho); color:var(--ink-soft); }
+
+  /* ---------- Concept ---------- */
+  .concept-grid{ display:grid; grid-template-columns:1.05fr .95fr; gap:clamp(36px,6vw,84px); align-items:center; }
+  .concept-copy p{ color:var(--ink-soft); margin-top:22px; max-width:46ch; }
+  .concept-media{ position:relative; }
+  .concept-media .ph.main{ aspect-ratio:4/5; border-radius:3px; }
+  .concept-media .ph.float{
+    position:absolute; width:46%; aspect-ratio:1/1; right:-7%; bottom:-9%;
+    border:8px solid var(--bg); border-radius:3px; box-shadow:0 30px 60px -30px oklch(0.30 0.04 52 / .4);
+  }
+  .leaf-note{
+    position:absolute; left:-5%; top:8%;
+    background:var(--surface); border:1px solid var(--line);
+    padding:16px 20px; border-radius:3px; max-width:200px;
+    box-shadow:0 24px 50px -34px oklch(0.30 0.04 52 / .45);
+  }
+  .leaf-note .fr{ font-family:var(--serif); font-style:italic; font-size:1.5rem; color:var(--terra); line-height:1; }
+  .leaf-note .t{ font-family:var(--jp); font-size:.8rem; color:var(--ink-soft); margin-top:8px; letter-spacing:.04em; }
+
+  /* ---------- Values strip ---------- */
+  .values{ background:var(--bg-2); }
+  .values-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(28px,5vw,64px); }
+  .value .num{ font-family:var(--serif); font-style:italic; font-size:1.5rem; color:var(--terra); }
+  .value h3{ font-family:var(--mincho); font-weight:500; font-size:1.3rem; color:var(--ink); margin:10px 0 12px; }
+  .value p{ color:var(--ink-soft); font-size:.96rem; }
+  .value{ padding-top:24px; border-top:1px solid var(--line); }
+
+  /* ---------- Menu ---------- */
+  .menu-head{ display:flex; align-items:flex-end; justify-content:space-between; gap:30px; flex-wrap:wrap; margin-bottom:54px; }
+  .menu-cols{ display:grid; grid-template-columns:1fr 1fr; gap:clamp(40px,7vw,96px); }
+  .menu-block + .menu-block{ margin-top:46px; }
+  .menu-cat{
+    font-family:var(--sans); font-size:.8rem; letter-spacing:.26em; text-transform:uppercase;
+    color:var(--terra); margin-bottom:24px; display:flex; align-items:center; gap:12px;
+  }
+  .menu-cat::after{ content:""; flex:1; height:1px; background:var(--line); }
+  .menu-item{ display:flex; align-items:baseline; gap:14px; padding:14px 0; border-bottom:1px dashed var(--line-soft); }
+  .menu-item .nm{ font-family:var(--mincho); font-size:1.12rem; color:var(--ink); white-space:nowrap; }
+  .menu-item .nm small{ display:block; font-family:var(--sans); font-size:.72rem; letter-spacing:.1em; color:var(--ink-soft); text-transform:uppercase; margin-top:2px; font-weight:300; }
+  .menu-item .dots{ flex:1; border-bottom:1px dotted var(--line); transform:translateY(-4px); }
+  .menu-item .pr{ font-family:var(--sans); font-size:1rem; color:var(--brown); white-space:nowrap; }
+  .menu-note{ margin-top:30px; font-size:.86rem; color:var(--ink-soft); font-family:var(--jp); }
+
+  /* ---------- Gallery ---------- */
+  .gallery{ background:var(--bg-2); }
+  .gal-grid{ display:grid; grid-template-columns:repeat(4,1fr); grid-auto-rows:200px; gap:14px; }
+  .gal-grid .ph{ border-radius:3px; transition:transform .6s var(--ease), filter .6s var(--ease); }
+  .gal-grid .ph:hover{ transform:scale(1.015); filter:brightness(1.04); }
+  .g-a{ grid-column:span 2; grid-row:span 2; }
+  .g-b{ grid-column:span 2; }
+  .g-tall{ grid-row:span 2; }
+
+  /* ---------- Access ---------- */
+  .access-grid{ display:grid; grid-template-columns:1fr 1fr; gap:clamp(36px,6vw,80px); align-items:center; }
+  .info-list{ margin-top:36px; }
+  .info-row{ display:grid; grid-template-columns:130px 1fr; gap:20px; padding:18px 0; border-top:1px solid var(--line); }
+  .info-row:last-child{ border-bottom:1px solid var(--line); }
+  .info-row dt{ font-family:var(--sans); font-size:.78rem; letter-spacing:.18em; text-transform:uppercase; color:var(--terra); padding-top:3px; }
+  .info-row dd{ font-family:var(--jp); color:var(--ink); }
+  .info-row dd .muted{ color:var(--ink-soft); font-size:.9rem; }
+  .map-ph{ aspect-ratio:1/1; border-radius:3px; }
+  .pill{ display:inline-flex; align-items:center; gap:8px; margin-top:26px; font-family:var(--sans); font-size:.82rem; letter-spacing:.1em; color:var(--terra); }
+  .pill::before{ content:""; width:7px; height:7px; border-radius:50%; background:var(--sage); }
+
+  /* ---------- Reservation ---------- */
+  .reserve{ background:var(--brown); color:oklch(0.96 0.014 78); }
+  .reserve .sec-eyebrow{ color:oklch(0.86 0.08 48); }
+  .reserve .sec-eyebrow::before{ background:oklch(0.86 0.08 48); }
+  .reserve h2.title{ color:oklch(0.97 0.014 80); }
+  .reserve h2.title em{ color:oklch(0.86 0.08 48); }
+  .reserve-grid{ display:grid; grid-template-columns:.85fr 1.15fr; gap:clamp(40px,6vw,80px); align-items:start; }
+  .reserve p.intro{ color:oklch(0.88 0.02 78); margin-top:20px; max-width:36ch; }
+  form{ display:grid; grid-template-columns:1fr 1fr; gap:20px 24px; }
+  .field{ display:flex; flex-direction:column; gap:8px; }
+  .field.full{ grid-column:1/-1; }
+  .field label{ font-family:var(--sans); font-size:.74rem; letter-spacing:.16em; text-transform:uppercase; color:oklch(0.84 0.03 78); }
+  .field input, .field select, .field textarea{
+    background:transparent; border:0; border-bottom:1px solid oklch(0.70 0.03 70 / .5);
+    color:oklch(0.97 0.014 80); font-family:var(--jp); font-size:1rem; padding:10px 2px;
+    transition:border-color .3s var(--ease);
+  }
+  .field textarea{ resize:vertical; min-height:64px; }
+  .field input:focus, .field select:focus, .field textarea:focus{ outline:0; border-color:oklch(0.86 0.08 48); }
+  .field input::placeholder, .field textarea::placeholder{ color:oklch(0.78 0.02 76 / .5); }
+  .field select option{ color:var(--ink); }
+  .field.invalid input, .field.invalid select{ border-color:oklch(0.62 0.16 28); }
+  .err{ font-family:var(--sans); font-size:.72rem; letter-spacing:.04em; color:oklch(0.78 0.13 34); min-height:0; opacity:0; transition:opacity .3s; }
+  .field.invalid .err{ opacity:1; }
+  .submit{
+    grid-column:1/-1; justify-self:start; margin-top:8px;
+    font-family:var(--sans); font-size:.84rem; letter-spacing:.14em; text-transform:uppercase;
+    background:oklch(0.86 0.08 48); color:var(--brown); border:0; border-radius:100px;
+    padding:15px 38px; cursor:pointer; transition:transform .3s var(--ease), background .3s var(--ease);
+  }
+  .submit:hover{ transform:translateY(-2px); background:oklch(0.90 0.07 50); }
+  .form-ok{
+    grid-column:1/-1; display:none; align-items:center; gap:12px;
+    font-family:var(--mincho); font-size:1.1rem; color:oklch(0.92 0.05 78);
+    padding:18px 0;
+  }
+  .form-ok.show{ display:flex; }
+  .form-ok .check{ width:30px; height:30px; border-radius:50%; border:1px solid oklch(0.86 0.08 48); display:grid; place-items:center; color:oklch(0.86 0.08 48); }
+
+  /* ---------- Footer ---------- */
+  footer{ background:oklch(0.26 0.022 50); color:oklch(0.82 0.02 76); padding-block:clamp(56px,8vh,90px); }
+  .foot-grid{ display:flex; justify-content:space-between; gap:40px; flex-wrap:wrap; align-items:flex-start; }
+  .foot-brand{ font-family:var(--serif); font-size:2.4rem; font-weight:500; color:oklch(0.96 0.014 78); letter-spacing:.05em; }
+  .foot-brand .dot{ color:var(--terra); }
+  .foot-tag{ font-family:var(--mincho); margin-top:14px; max-width:30ch; color:oklch(0.78 0.02 76); }
+  .foot-cols{ display:flex; gap:clamp(40px,6vw,80px); flex-wrap:wrap; }
+  .foot-col h4{ font-family:var(--sans); font-size:.74rem; letter-spacing:.2em; text-transform:uppercase; color:var(--terra); margin-bottom:16px; }
+  .foot-col a, .foot-col p{ display:block; font-size:.92rem; color:oklch(0.82 0.02 76); margin-bottom:9px; transition:color .3s; }
+  .foot-col a:hover{ color:oklch(0.96 0.014 78); }
+  .foot-bottom{ margin-top:54px; padding-top:24px; border-top:1px solid oklch(0.40 0.02 52); display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; font-family:var(--sans); font-size:.76rem; letter-spacing:.06em; color:oklch(0.66 0.02 74); }
+
+  /* ---------- Scroll reveal ---------- */
+  .reveal{ opacity:0; transform:translateY(28px); transition:opacity 1s var(--ease), transform 1s var(--ease); }
+  .reveal.in{ opacity:1; transform:none; }
+  .reveal.d1{ transition-delay:.08s; } .reveal.d2{ transition-delay:.16s; } .reveal.d3{ transition-delay:.24s; }
+  @media (prefers-reduced-motion:reduce){ .reveal{ opacity:1; transform:none; } .scrollcue .bar::after{ animation:none; } html{ scroll-behavior:auto; } }
+
+  /* ---------- Mobile ---------- */
+  @media (max-width:880px){
+    .nav-links{
+      position:fixed; inset:0 0 0 auto; width:min(82vw,340px);
+      background:oklch(0.30 0.022 52); flex-direction:column; align-items:flex-start; justify-content:center;
+      gap:28px; padding:40px clamp(28px,7vw,48px); transform:translateX(100%);
+      transition:transform .5s var(--ease); z-index:70;
+    }
+    .nav-links.open{ transform:none; }
+    .nav-links a, header.nav:not(.scrolled) .nav-links a{ color:oklch(0.95 0.014 80); font-size:1rem; }
+    .nav-cta{ color:oklch(0.86 0.08 48) !important; border-color:oklch(0.86 0.08 48); }
+    .burger{ display:flex; z-index:80; }
+    .burger.open span{ background:oklch(0.95 0.014 80) !important; }
+    .burger.open span:nth-child(1){ transform:translateY(6.5px) rotate(45deg); }
+    .burger.open span:nth-child(2){ opacity:0; }
+    .burger.open span:nth-child(3){ transform:translateY(-6.5px) rotate(-45deg); }
+    .nav-backdrop{ position:fixed; inset:0; background:oklch(0.20 0.02 50 / 0); pointer-events:none; transition:background .5s; z-index:65; }
+    .nav-backdrop.open{ background:oklch(0.20 0.02 50 / .5); pointer-events:auto; }
+    .concept-grid, .access-grid, .reserve-grid{ grid-template-columns:1fr; }
+    .concept-media{ margin-top:20px; }
+    .values-grid{ grid-template-columns:1fr; gap:0; }
+    .value{ padding-block:24px; }
+    .value + .value{ border-top:1px solid var(--line); }
+    .menu-cols{ grid-template-columns:1fr; gap:46px; }
+    form{ grid-template-columns:1fr; }
+    .gal-grid{ grid-template-columns:repeat(2,1fr); grid-auto-rows:160px; }
+    .g-a{ grid-column:span 2; }
+  }
+  @media (max-width:520px){
+    .info-row{ grid-template-columns:96px 1fr; }
+    .hero .lead{ font-size:1.05rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="nav-backdrop" id="backdrop"></div>
+<header class="nav" id="nav">
+  <div class="wrap nav-inner">
+    <a href="#top" class="brand">Sérène<span class="dot">.</span></a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#concept">Concept</a>
+      <a href="#menu">Menu</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#access">Access</a>
+      <a href="#reserve" class="nav-cta">ご予約</a>
+    </nav>
+    <button class="burger" id="burger" aria-label="メニューを開く"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="top" data-screen-label="Hero">
+  <div class="ph" data-label="店内の自然光 / 大判ビジュアル  ·  1920×1280"></div>
+  <div class="wrap hero-inner">
+    <p class="eyebrow reveal">Café & Roastery — depuis 2026</p>
+    <h1 class="reveal d1">Sé<em>r</em>ène</h1>
+    <p class="lead reveal d2">木のぬくもりと、植物の緑。<br />ゆっくりと、こころほどける時間を。<br /><span style="font-family:var(--serif);font-style:italic;opacity:.85;">— un moment de douceur.</span></p>
+  </div>
+  <div class="scrollcue">Scroll<span class="bar"></span></div>
+</section>
+
+<!-- CONCEPT -->
+<section class="pad" id="concept" data-screen-label="Concept">
+  <div class="wrap concept-grid">
+    <div class="concept-copy">
+      <p class="sec-eyebrow reveal">Notre concept</p>
+      <h2 class="title reveal d1">日々の合間に、<br /><em>静けさ</em>のひと休み。</h2>
+      <p class="reveal d2">Sérène（セレーヌ）は、フランス語で「穏やか」を意味する言葉。慌ただしい毎日のなかでも、一杯のコーヒーと向き合う時間だけは、ゆっくりと流れてほしい。そんな願いから生まれた、小さなカフェです。</p>
+      <p class="reveal d2">天然木のテーブルと、たっぷりの観葉植物。北欧の住まいのように肩の力が抜ける空間で、ていねいに淹れた一杯と、焼きたての焼き菓子をどうぞ。</p>
+    </div>
+    <div class="concept-media reveal d1">
+      <div class="ph main" data-label="店内 / インテリア  ·  1000×1250"></div>
+      <div class="ph float" data-label="コーヒー  ·  600×600"></div>
+      <div class="leaf-note">
+        <div class="fr">douceur</div>
+        <div class="t">やわらかな光と、植物に囲まれて。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VALUES -->
+<section class="pad values" data-screen-label="Values">
+  <div class="wrap">
+    <div class="values-grid">
+      <div class="value reveal">
+        <div class="num">01</div>
+        <h3>自家焙煎の一杯</h3>
+        <p>少量ずつ丁寧に焙煎した豆を、注文ごとにハンドドリップ。香りの立ちはじめから、最後の一口まで。</p>
+      </div>
+      <div class="value reveal d1">
+        <div class="num">02</div>
+        <h3>植物と木の空間</h3>
+        <p>無垢材の家具とたくさんのグリーン。窓辺のいちばん心地よい席で、本を読むように過ごせます。</p>
+      </div>
+      <div class="value reveal d2">
+        <div class="num">03</div>
+        <h3>毎朝の焼き菓子</h3>
+        <p>季節の素材を使った焼き菓子を、毎朝店内のオーブンで。コーヒーに寄り添う、控えめな甘さ。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MENU -->
+<section class="pad" id="menu" data-screen-label="Menu">
+  <div class="wrap">
+    <div class="menu-head">
+      <div>
+        <p class="sec-eyebrow reveal">La carte</p>
+        <h2 class="title reveal d1">メニュー</h2>
+      </div>
+      <p class="sub-jp reveal d1" style="max-width:34ch;">価格は税込です。豆の種類はその日のラインナップによって変わります。お気軽にスタッフへどうぞ。</p>
+    </div>
+
+    <div class="menu-cols">
+      <div>
+        <div class="menu-block reveal">
+          <div class="menu-cat">Coffee</div>
+          <div class="menu-item"><span class="nm">ハンドドリップ<small>Single Origin</small></span><span class="dots"></span><span class="pr">¥620</span></div>
+          <div class="menu-item"><span class="nm">カフェラテ<small>Café Latte</small></span><span class="dots"></span><span class="pr">¥600</span></div>
+          <div class="menu-item"><span class="nm">カプチーノ<small>Cappuccino</small></span><span class="dots"></span><span class="pr">¥580</span></div>
+          <div class="menu-item"><span class="nm">エスプレッソ<small>Espresso</small></span><span class="dots"></span><span class="pr">¥460</span></div>
+          <div class="menu-item"><span class="nm">アイスカフェオレ<small>Iced Café au Lait</small></span><span class="dots"></span><span class="pr">¥620</span></div>
+        </div>
+        <div class="menu-block reveal d1">
+          <div class="menu-cat">Tea & Others</div>
+          <div class="menu-item"><span class="nm">季節のハーブティー<small>Herbal Tea</small></span><span class="dots"></span><span class="pr">¥580</span></div>
+          <div class="menu-item"><span class="nm">ほうじ茶ラテ<small>Hojicha Latte</small></span><span class="dots"></span><span class="pr">¥600</span></div>
+          <div class="menu-item"><span class="nm">自家製レモネード<small>Lemonade</small></span><span class="dots"></span><span class="pr">¥640</span></div>
+        </div>
+      </div>
+      <div>
+        <div class="menu-block reveal d1">
+          <div class="menu-cat">Sweets</div>
+          <div class="menu-item"><span class="nm">本日のスコーン<small>Scone of the day</small></span><span class="dots"></span><span class="pr">¥420</span></div>
+          <div class="menu-item"><span class="nm">ガトーショコラ<small>Gâteau au chocolat</small></span><span class="dots"></span><span class="pr">¥560</span></div>
+          <div class="menu-item"><span class="nm">季節のタルト<small>Tarte de saison</small></span><span class="dots"></span><span class="pr">¥620</span></div>
+          <div class="menu-item"><span class="nm">バスクチーズケーキ<small>Basque Cheesecake</small></span><span class="dots"></span><span class="pr">¥580</span></div>
+        </div>
+        <div class="menu-block reveal d2">
+          <div class="menu-cat">Light Meal</div>
+          <div class="menu-item"><span class="nm">キッシュプレート<small>Quiche plate</small></span><span class="dots"></span><span class="pr">¥980</span></div>
+          <div class="menu-item"><span class="nm">厚切りトースト<small>Thick Toast</small></span><span class="dots"></span><span class="pr">¥520</span></div>
+          <div class="menu-item"><span class="nm">本日のスープセット<small>Soup set</small></span><span class="dots"></span><span class="pr">¥880</span></div>
+        </div>
+        <p class="menu-note reveal d2">＊ お持ち帰り用の焼き菓子・ドリップバッグもご用意しています。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="pad gallery" id="gallery" data-screen-label="Gallery">
+  <div class="wrap">
+    <div style="margin-bottom:46px;">
+      <p class="sec-eyebrow reveal">Galerie</p>
+      <h2 class="title reveal d1">お店の<em>風景</em></h2>
+    </div>
+    <div class="gal-grid reveal d1">
+      <div class="ph g-a" data-label="店内全景  ·  1000×1000"></div>
+      <div class="ph g-b" data-label="カウンター  ·  1000×500"></div>
+      <div class="ph" data-label="コーヒー  ·  500×500"></div>
+      <div class="ph" data-label="焼き菓子  ·  500×500"></div>
+      <div class="ph g-tall" data-label="窓辺の席  ·  500×1000"></div>
+      <div class="ph" data-label="植物  ·  500×500"></div>
+      <div class="ph" data-label="ラテアート  ·  500×500"></div>
+      <div class="ph g-b" data-label="外観 / ファサード  ·  1000×500"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ACCESS -->
+<section class="pad" id="access" data-screen-label="Access">
+  <div class="wrap access-grid">
+    <div>
+      <p class="sec-eyebrow reveal">Accès & horaires</p>
+      <h2 class="title reveal d1">アクセス・<br />営業時間</h2>
+      <dl class="info-list reveal d1">
+        <div class="info-row"><dt>Open</dt><dd>9:00 — 19:00<br /><span class="muted">L.O. フード 18:00 / ドリンク 18:30</span></dd></div>
+        <div class="info-row"><dt>Closed</dt><dd>毎週水曜日<br /><span class="muted">※ 祝日の場合は翌日休</span></dd></div>
+        <div class="info-row"><dt>Address</dt><dd>東京都〇〇区〇〇 1-2-3<br /><span class="muted">〇〇駅 西口より徒歩6分</span></dd></div>
+        <div class="info-row"><dt>Tel</dt><dd>03-0000-0000</dd></div>
+      </dl>
+      <span class="pill reveal d2">テラス席・Wi-Fi・電源あり</span>
+    </div>
+    <div class="reveal d1">
+      <div class="ph map-ph" data-label="MAP / 地図を埋め込み  ·  Google Maps"></div>
+    </div>
+  </div>
+</section>
+
+<!-- RESERVE -->
+<section class="pad reserve" id="reserve" data-screen-label="Reserve">
+  <div class="wrap reserve-grid">
+    <div>
+      <p class="sec-eyebrow reveal">Réservation</p>
+      <h2 class="title reveal d1">ご予約・<br /><em>お問い合わせ</em></h2>
+      <p class="intro reveal d2">2名さま以上のご予約を承っています。お祝いごとやちょっとした集まりにも。下記フォームよりお気軽にどうぞ。</p>
+    </div>
+    <form id="reserveForm" novalidate>
+      <div class="field">
+        <label for="name">お名前 *</label>
+        <input type="text" id="name" name="name" placeholder="山田 花子" />
+        <span class="err">お名前をご入力ください</span>
+      </div>
+      <div class="field">
+        <label for="tel">電話番号 *</label>
+        <input type="tel" id="tel" name="tel" placeholder="090-0000-0000" />
+        <span class="err">電話番号をご入力ください</span>
+      </div>
+      <div class="field">
+        <label for="date">ご希望日 *</label>
+        <input type="date" id="date" name="date" />
+        <span class="err">ご希望日を選択してください</span>
+      </div>
+      <div class="field">
+        <label for="guests">人数</label>
+        <select id="guests" name="guests">
+          <option>2名</option><option>3名</option><option>4名</option>
+          <option>5名</option><option>6名以上</option>
+        </select>
+        <span class="err"></span>
+      </div>
+      <div class="field full">
+        <label for="msg">ご要望（任意）</label>
+        <textarea id="msg" name="msg" placeholder="お席のご希望、アレルギーなどございましたら"></textarea>
+        <span class="err"></span>
+      </div>
+      <button type="submit" class="submit">予約リクエストを送る</button>
+      <div class="form-ok" id="formOk"><span class="check">✓</span>ありがとうございます。確認のうえ、折り返しご連絡いたします。</div>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer data-screen-label="Footer">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="foot-brand">Sérène<span class="dot">.</span></div>
+        <p class="foot-tag">ゆっくりと、こころほどける時間を。<br />un moment de douceur.</p>
+      </div>
+      <div class="foot-cols">
+        <div class="foot-col">
+          <h4>Menu</h4>
+          <a href="#concept">コンセプト</a>
+          <a href="#menu">メニュー</a>
+          <a href="#gallery">ギャラリー</a>
+          <a href="#access">アクセス</a>
+        </div>
+        <div class="foot-col">
+          <h4>Hours</h4>
+          <p>9:00 — 19:00</p>
+          <p>定休日：水曜</p>
+          <p>03-0000-0000</p>
+        </div>
+        <div class="foot-col">
+          <h4>Follow</h4>
+          <a href="#" target="_blank" rel="noopener">Instagram</a>
+          <a href="#" target="_blank" rel="noopener">X (Twitter)</a>
+          <a href="#" target="_blank" rel="noopener">LINE</a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Sérène Café. All rights reserved.</span>
+      <span>Tokyo, Japan</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Sticky nav state
+  const nav = document.getElementById('nav');
+  const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 40);
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive:true });
+
+  // Mobile menu
+  const burger = document.getElementById('burger');
+  const links = document.getElementById('navLinks');
+  const backdrop = document.getElementById('backdrop');
+  const toggleMenu = (open) => {
+    const next = open ?? !links.classList.contains('open');
+    links.classList.toggle('open', next);
+    burger.classList.toggle('open', next);
+    backdrop.classList.toggle('open', next);
+    document.body.style.overflow = next ? 'hidden' : '';
+  };
+  burger.addEventListener('click', () => toggleMenu());
+  backdrop.addEventListener('click', () => toggleMenu(false));
+  links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => toggleMenu(false)));
+
+  // Scroll reveal — IntersectionObserver with a viewport-check fallback
+  const reveals = [...document.querySelectorAll('.reveal')];
+  const show = (el) => el.classList.add('in');
+  const checkInView = () => {
+    const h = window.innerHeight || document.documentElement.clientHeight;
+    for (let i = reveals.length - 1; i >= 0; i--) {
+      const el = reveals[i];
+      if (el.classList.contains('in')) { reveals.splice(i, 1); continue; }
+      const r = el.getBoundingClientRect();
+      if (r.top < h * 0.92 && r.bottom > 0) { show(el); reveals.splice(i, 1); }
+    }
+  };
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries, obs) => {
+      entries.forEach(e => { if (e.isIntersecting) { show(e.target); obs.unobserve(e.target); } });
+    }, { threshold:0.1, rootMargin:'0px 0px -8% 0px' });
+    reveals.forEach(el => io.observe(el));
+  }
+  // Fallback / belt-and-suspenders: reveal anything already in view
+  checkInView();
+  requestAnimationFrame(checkInView);
+  window.addEventListener('scroll', checkInView, { passive:true });
+  window.addEventListener('resize', checkInView, { passive:true });
+  window.addEventListener('load', checkInView);
+
+  // Form validation
+  const form = document.getElementById('reserveForm');
+  const ok = document.getElementById('formOk');
+  const required = ['name','tel','date'];
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    let valid = true;
+    required.forEach(id => {
+      const input = document.getElementById(id);
+      const field = input.closest('.field');
+      const bad = !input.value.trim();
+      field.classList.toggle('invalid', bad);
+      if (bad) valid = false;
+    });
+    if (valid){
+      form.querySelectorAll('input,select,textarea,.submit').forEach(el => el.style.display='none');
+      ok.classList.add('show');
+    }
+  });
+  form.querySelectorAll('input,select').forEach(el => {
+    el.addEventListener('input', () => el.closest('.field').classList.remove('invalid'));
+  });
+
+  // Set min date to today
+  const dateInput = document.getElementById('date');
+  dateInput.min = new Date().toISOString().split('T')[0];
+</script>
+</body>
+</html>
